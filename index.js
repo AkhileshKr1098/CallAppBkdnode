@@ -6,13 +6,13 @@ const port = process.env.PORT || 3000;
 // Create an HTTP server
 const server = http.createServer((req, res) => {
   res.writeHead(200, { 'Content-Type': 'application/json' });
-  res.end(JSON.stringify({ message: 'Server is running tetsting', port: port }));
+  res.end(JSON.stringify({ message: 'Server is running tetsting http://localhost:4200/home', port: port }));
 });
 
 // Initialize socket.io on the same HTTP server
 const io = socketIo(server, {
   cors: {
-    origin: '*',
+    origin: 'http://localhost:4200/',
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type'],
     credentials: true
