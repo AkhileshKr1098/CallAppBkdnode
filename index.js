@@ -5,20 +5,17 @@ const port = process.env.PORT || 3000;
 
 // Create an HTTP server
 const server = http.createServer((req, res) => {
-  // Set the response HTTP header with a status code and content type
   res.writeHead(200, { 'Content-Type': 'application/json' });
-
-  // Return a JSON response when accessing the server
-  res.end(JSON.stringify({
-    message: 'Server is running',
-    port: port
-  }));
+  res.end(JSON.stringify({ message: 'Server is running', port: port }));
 });
 
 // Initialize socket.io on the same HTTP server
 const io = socketIo(server, {
   cors: {
     origin: '*',
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type'],
+    credentials: true
   },
 });
 
@@ -29,8 +26,6 @@ io.on('connection', (socket) => {
 
   // Add the new user to the connected users list
   connectedUsers.push(socket.id);
-
-  // Notify all clients about the connected users
   io.emit('user-connected', connectedUsers);
 
   // Handle offer
@@ -60,19 +55,17 @@ io.on('connection', (socket) => {
     }
   });
 
-  // When a user disconnects
+  // Handle disconnection
   socket.on('disconnect', () => {
     console.log('User disconnected:', socket.id);
 
     // Remove the user from the list
     connectedUsers = connectedUsers.filter(user => user !== socket.id);
-
-    // Notify all clients about the updated list of connected users
     io.emit('user-connected', connectedUsers);
   });
 });
 
-// Start the server on port 3000
+// Start the server
 server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
