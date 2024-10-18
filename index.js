@@ -12,7 +12,7 @@ const server = http.createServer((req, res) => {
 // Initialize socket.io on the same HTTP server
 const io = socketIo(server, {
   cors: {
-    origin: 'http://localhost:4200/',
+    origin: 'https://video-call-app-rouge-eight.vercel.app/',
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type'],
     credentials: true
